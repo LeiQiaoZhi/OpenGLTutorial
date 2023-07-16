@@ -1,0 +1,6 @@
+﻿  Main.cpp
+C:\Users\user\Documents\George\CPP_Projects\OpenGLTutorial\UIApp.h(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\user\Documents\George\CPP_Projects\OpenGLTutorial\UIApp.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\user\Documents\George\CPP_Projects\OpenGLTutorial\UIApp.h(5,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\user\Documents\George\CPP_Projects\OpenGLTutorial\Main.cpp(2,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  OpenGLTutorial.vcxproj -> C:\Users\user\Documents\George\CPP_Projects\OpenGLTutorial\x64\Debug\OpenGLTutorial.exe
