@@ -35,7 +35,7 @@ Texture::Texture(const char* _image, GLenum _type, GLenum _slot, GLenum _format,
 
 void Texture::pass_texture_to_shader(Shader& _shader, const char* uniform, GLuint _texture_unit)
 {
-	GLuint texture_uniform = glGetUniformLocation(_shader.shader_program_ID, uniform);
+	GLuint texture_uniform = glGetUniformLocation(_shader.program_ID, uniform);
 	_shader.activate();
 	// pass texture from texture unit to shader
 	glUniform1i(texture_uniform, _texture_unit);

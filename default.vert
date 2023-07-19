@@ -5,12 +5,19 @@ layout (location = 2) in vec2 aTex; // TexCoords
 
 out vec3 color;
 out vec2 texCoord;
+
 uniform float scale;
+uniform mat4 world;
+uniform mat4 view;
+uniform mat4 proj;
 
 void main()
 {
 	// Outputs the positions/coordinates of all vertices
-	gl_Position = vec4(aPos.x * scale, aPos.y * scale, aPos.z * scale, 1.0f);
+	vec4 scaled_pos = vec4(aPos.x * scale, aPos.y * scale, aPos.z * scale, 1.0f);
+	// transforms from model space to clip space
+	gl_Position = proj * view * world * scaled_pos;
+
 	// Assigns the colors from the Vertex Data to "color"
 	color = aColor;
 	texCoord = aTex;

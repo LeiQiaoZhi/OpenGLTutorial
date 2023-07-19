@@ -11,7 +11,7 @@ std::string get_file_contents(const char* filename);
 
 class Shader {
 public:
-	GLuint shader_program_ID;
+	GLuint program_ID;
 
 	Shader(const char* vertexFile, const char* fragFile);
 
