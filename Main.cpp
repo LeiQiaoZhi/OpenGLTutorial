@@ -4,6 +4,8 @@
 #include "VAO.h"
 #include "EBO.h"
 #include "Texture.h"
+#include "Camera.h"
+#include "CameraController.h"
 
 #include <iostream>
 #include <glad/glad.h>
@@ -103,6 +105,10 @@ int main() {
 	float rotation = 0.0f;
 	double prev_time = glfwGetTime();
 
+	// create camera
+	Camera camera(glm::vec3(0.0f, 0.0f, 1.0f));
+	CameraController camera_controller(&camera, 10.0f, 10.0f, WIDTH, HEIGHT);
+
 	// in a while loop so the window isn't closed immediately
 	while (!glfwWindowShouldClose(window)) {
 		// background color
@@ -123,21 +129,17 @@ int main() {
 
 		// initialize matrices
 		glm::mat4 world = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 proj = glm::mat4(1.0f);
 
 		// set up matrices
 		world = glm::rotate(world, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
-		proj = glm::perspective(glm::radians(45.0f), (float)WIDTH / HEIGHT, 0.1f, 100.0f);
 
 		// send matrices to shader
 		int world_id = glGetUniformLocation(shader.program_ID, "world");
 		int view_id = glGetUniformLocation(shader.program_ID, "view");
 		int proj_id = glGetUniformLocation(shader.program_ID, "proj");
 		glUniformMatrix4fv(world_id, 1, GL_FALSE, glm::value_ptr(world));
-		glUniformMatrix4fv(view_id, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(proj_id, 1, GL_FALSE, glm::value_ptr(proj));
+		glUniformMatrix4fv(view_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_view_matrix()));
+		glUniformMatrix4fv(proj_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_proj_matrix()));
 
 		texture.bind();
 		vao.bind();
