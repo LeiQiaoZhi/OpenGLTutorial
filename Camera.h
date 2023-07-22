@@ -25,4 +25,7 @@ public:
 	glm::mat4 compute_view_matrix();
 	glm::mat4 compute_proj_matrix(int _width, int _height);
 
+	// state changers
+	void move(float _d_right, float _d_up);
+
 };

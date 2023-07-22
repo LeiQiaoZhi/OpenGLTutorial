@@ -8,16 +8,28 @@ class CameraController
 private:
 	Camera* camera_;
 
-	float move_speed_;
-	float rotate_speed_;
+	// settings
+	float move_speed_ = 1.0f;
+	float rotate_speed_ = 1.0f;
+	bool invert_x_ = true;
+	bool invert_y_ = true;
 
-	const int width_ = 1600;
-	const int height_ = 900;
+	const int width_;
+	const int height_;
+
+	// states
+	bool first_mouse_ = true;
+	double last_x_ = width_ / 2.0f;
+	double last_y_ = height_ / 2.0f;
 
 public:
-	CameraController(Camera* _camera, float _move_speed, float _rotate_speed, int _width, int _height) : camera_(_camera), move_speed_(_move_speed), rotate_speed_(_rotate_speed), width_(_width), height_(_height) {}
+	CameraController(Camera* _camera, int _width, int _height) : camera_(_camera), width_(_width), height_(_height) {}
 
 	void handle_inputs(GLFWwindow* _window);
+
+	// operations
+	void pan(float _dx, float _dy);
+	void orbit(float _angle_x, float _angle_y);
 
 	glm::mat4 compute_view_matrix() { return camera_->compute_view_matrix(); }
 	glm::mat4 compute_proj_matrix() { return camera_->compute_proj_matrix(width_, height_); }

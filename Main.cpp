@@ -106,8 +106,8 @@ int main() {
 	double prev_time = glfwGetTime();
 
 	// create camera
-	Camera camera(glm::vec3(0.0f, 0.0f, 1.0f));
-	CameraController camera_controller(&camera, 10.0f, 10.0f, WIDTH, HEIGHT);
+	Camera camera(glm::vec3(0.0f, 0.0f, -1.0f));
+	CameraController camera_controller(&camera, WIDTH, HEIGHT);
 
 	// in a while loop so the window isn't closed immediately
 	while (!glfwWindowShouldClose(window)) {
@@ -140,6 +140,8 @@ int main() {
 		glUniformMatrix4fv(world_id, 1, GL_FALSE, glm::value_ptr(world));
 		glUniformMatrix4fv(view_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_view_matrix()));
 		glUniformMatrix4fv(proj_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_proj_matrix()));
+
+		camera_controller.handle_inputs(window);
 
 		texture.bind();
 		vao.bind();
