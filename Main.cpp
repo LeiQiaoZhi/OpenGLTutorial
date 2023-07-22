@@ -90,7 +90,7 @@ int main() {
 	vbo.unbind();
 	ebo.unbind();
 
-	Texture texture("Textures/popcat.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
+	Texture texture("Textures/brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	texture.pass_texture_to_shader(shader, "tex0", 0);
 
 	UI::init(window, "#version 330");
@@ -123,7 +123,7 @@ int main() {
 		// rotation 
 		double current_time = glfwGetTime();
 		if (current_time - prev_time > 1 / 120) {
-			rotation += 0.5f;
+			//rotation += 0.5f;
 			prev_time = current_time;
 		}
 

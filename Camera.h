@@ -21,11 +21,14 @@ public:
 	glm::vec3 get_position() { return position_; }
 	glm::vec3 get_forward() { return forward_; }
 	glm::vec3 get_up() { return up_; }
+	glm::vec3 get_right() { return glm::normalize(glm::cross(forward_, up_)); }
 
 	glm::mat4 compute_view_matrix();
 	glm::mat4 compute_proj_matrix(int _width, int _height);
 
 	// state changers
 	void move(float _d_right, float _d_up);
+	void set_direction(glm::vec3 _forward, glm::vec3 _up) { forward_ = _forward; up_ = _up; }
+	void set_position(glm::vec3 _position) { position_ = _position; }
 
 };
