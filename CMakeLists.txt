@@ -11,16 +11,19 @@ file(GLOB HEADER_FILES "*.h")
 file(GLOB IMGUI "${CMAKE_SOURCE_DIR}/imgui/*")
 file(GLOB GLAD "glad.c")
 file(GLOB GIT ".gitignore")
+file(GLOB SHADERS "*.frag" "*.vert")
 
 # Set up filters for organizing the source files in the Visual Studio solution
 source_group("Source Files" FILES ${CPP_SOURCES})
 source_group("Header Files" FILES ${HEADER_FILES})
+source_group("Shader Files" FILES ${SHADERS})
 source_group("External\\Imgui" FILES ${IMGUI})
 source_group("External\\Glad" FILES ${GLAD})
 source_group("External\\Git" FILES ${GIT})
 
 # Add the executable target and link libraries
-add_executable(OpenGLApp ${CPP_SOURCES} ${HEADER_FILES} ${IMGUI} ${GLAD} ${GIT})
+add_executable(OpenGLApp ${CPP_SOURCES} ${HEADER_FILES} ${IMGUI} ${GLAD} ${GIT} ${SHADERS})
+set_source_files_properties(${GIT} ${SHADERS} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 # Set the additional include directories
 target_include_directories(OpenGLApp PRIVATE
