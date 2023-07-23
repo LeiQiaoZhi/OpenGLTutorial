@@ -5,12 +5,22 @@ project(OpenGLApp)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add the source files from the source directory
-file(GLOB SOURCES "${CMAKE_SOURCE_DIR}/*.cpp" "${CMAKE_SOURCE_DIR}/*.h" "${CMAKE_SOURCE_DIR}/imgui/*.cpp" "${CMAKE_SOURCE_DIR}/imgui/*.h" "glad.c")
-message(${SOURCES})
+# Collect all .cpp and .h files in the current directory
+file(GLOB CPP_SOURCES "*.cpp")
+file(GLOB HEADER_FILES "*.h")
+file(GLOB IMGUI "${CMAKE_SOURCE_DIR}/imgui/*")
+file(GLOB GLAD "glad.c")
+file(GLOB GIT ".gitignore")
+
+# Set up filters for organizing the source files in the Visual Studio solution
+source_group("Source Files" FILES ${CPP_SOURCES})
+source_group("Header Files" FILES ${HEADER_FILES})
+source_group("External\\Imgui" FILES ${IMGUI})
+source_group("External\\Glad" FILES ${GLAD})
+source_group("External\\Git" FILES ${GIT})
 
 # Add the executable target and link libraries
-add_executable(OpenGLApp ${SOURCES})
+add_executable(OpenGLApp ${CPP_SOURCES} ${HEADER_FILES} ${IMGUI} ${GLAD} ${GIT})
 
 # Set the additional include directories
 target_include_directories(OpenGLApp PRIVATE
@@ -23,9 +33,10 @@ get_target_property(OpenGLApp_INCLUDE_DIRS OpenGLApp INCLUDE_DIRECTORIES)
 message(STATUS "Include directories for OpenGLApp: ${OpenGLApp_INCLUDE_DIRS}")
 
 # Use find_library to locate opengl32.lib
-find_library(OPENGL_LIB NAMES opengl32.lib)
+find_library(OPENGL_LIB NAMES opengl32.lib HINTS "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.20348.0/um/x64/OpenGL32.Lib")
 if (NOT OPENGL_LIB)
-    message(FATAL_ERROR "OpenGL library (opengl32.lib) not found.")
+    set(OPENGL_LIB "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.20348.0/um/x64/OpenGL32.Lib")
+    #message(FATAL_ERROR "OpenGL library (opengl32.lib) not found.")
 endif()
 # Set the path to glfw3.lib
 set(GLFW_LIB "${CMAKE_SOURCE_DIR}/Libraries/lib/glfw3.lib")
