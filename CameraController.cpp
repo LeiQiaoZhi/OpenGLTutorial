@@ -44,7 +44,7 @@ void CameraController::handle_inputs(GLFWwindow* _window)
 
 void CameraController::pan(float _dx, float _dy)
 {
-	std::cout << "pan x:" << _dx << " y:" << _dy << std::endl;
+	//std::cout << "pan x:" << _dx << " y:" << _dy << std::endl;
 	camera_->move(_dx * move_speed_, _dy * move_speed_);
 }
 

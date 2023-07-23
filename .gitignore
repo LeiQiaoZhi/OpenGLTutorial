@@ -1,5 +1,6 @@
 # Compiled Object files
 x64/
+out/
 *.slo
 *.lo
 *.o

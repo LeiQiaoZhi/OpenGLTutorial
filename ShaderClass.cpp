@@ -1,9 +1,16 @@
 #include "shaderClass.h"
+#include <filesystem>
 
 // Reads a text file and outputs a string with everything in the text file
 std::string get_file_contents(const char* _filename)
 {
-	std::ifstream in(_filename, std::ios::binary);
+	std::filesystem::path absolute_path = std::filesystem::current_path() / _filename;
+	std::ifstream in(absolute_path, std::ios::binary);
+	if (!in) {
+		throw std::runtime_error("Error opening file: " + absolute_path.string());
+	}
+
+	//std::ifstream in(_filename, std::ios::binary);
 	if (in)
 	{
 		std::string contents;

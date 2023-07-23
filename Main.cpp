@@ -67,7 +67,7 @@ int main() {
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	// create shader program
-	Shader shader("default.vert", "default.frag");
+	Shader shader("C:/Users/user/Documents/George/CPP_Projects/OpenGLTutorial/default.vert", "C:/Users/user/Documents/George/CPP_Projects/OpenGLTutorial/default.frag");
 
 	// set up vertex array object
 	VAO vao;
@@ -90,7 +90,7 @@ int main() {
 	vbo.unbind();
 	ebo.unbind();
 
-	Texture texture("Textures/brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture texture("C:/Users/user/Documents/George/CPP_Projects/OpenGLTutorial/Textures/brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	texture.pass_texture_to_shader(shader, "tex0", 0);
 
 	UI::init(window, "#version 330");
