@@ -13,6 +13,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <filesystem>
+#include <string>
+
+namespace fs = std::filesystem;
+
+std::string dir_path = fs::current_path().parent_path().string(); 
 
 const int WIDTH = 1600;
 const int HEIGHT = 1600;
@@ -67,7 +73,7 @@ int main() {
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	// create shader program
-	Shader shader("C:/Users/user/Documents/George/CPP_Projects/OpenGLTutorial/default.vert", "C:/Users/user/Documents/George/CPP_Projects/OpenGLTutorial/default.frag");
+	Shader shader((dir_path + "\\default.vert").c_str(), (dir_path + "\\default.frag").c_str());
 
 	// set up vertex array object
 	VAO vao;
@@ -90,7 +96,7 @@ int main() {
 	vbo.unbind();
 	ebo.unbind();
 
-	Texture texture("C:/Users/user/Documents/George/CPP_Projects/OpenGLTutorial/Textures/brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture texture((dir_path + "\\Textures\\brick.png").c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	texture.pass_texture_to_shader(shader, "tex0", 0);
 
 	UI::init(window, "#version 330");
