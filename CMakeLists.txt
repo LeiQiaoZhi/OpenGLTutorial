@@ -36,9 +36,9 @@ get_target_property(OpenGLApp_INCLUDE_DIRS OpenGLApp INCLUDE_DIRECTORIES)
 message(STATUS "Include directories for OpenGLApp: ${OpenGLApp_INCLUDE_DIRS}")
 
 # Use find_library to locate opengl32.lib
-find_library(OPENGL_LIB NAMES opengl32.lib HINTS "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.20348.0/um/x64/OpenGL32.Lib")
+find_library(OPENGL_LIB NAMES opengl32.lib)
 if (NOT OPENGL_LIB)
-    set(OPENGL_LIB "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.20348.0/um/x64/OpenGL32.Lib")
+    set(OPENGL_LIB "C:/Program Files (x86)/Windows Kits/10/Lib/${CMAKE_SYSTEM_VERSION}.0/um/x64/OpenGL32.Lib")
     #message(FATAL_ERROR "OpenGL library (opengl32.lib) not found.")
 endif()
 # Set the path to glfw3.lib
@@ -48,3 +48,4 @@ target_link_libraries(OpenGLApp PRIVATE
     ${GLFW_LIB}
     ${OPENGL_LIB}
 )
+
