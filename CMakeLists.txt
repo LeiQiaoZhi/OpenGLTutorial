@@ -6,12 +6,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Collect all .cpp and .h files in the current directory
-file(GLOB CPP_SOURCES "*.cpp")
-file(GLOB HEADER_FILES "*.h")
-file(GLOB IMGUI "${CMAKE_SOURCE_DIR}/imgui/*")
-file(GLOB GLAD "glad.c")
-file(GLOB GIT ".gitignore")
-file(GLOB SHADERS "*.frag" "*.vert")
+file(GLOB_RECURSE CPP_SOURCES "Source/*.cpp")
+file(GLOB_RECURSE HEADER_FILES "Source/*.h")
+file(GLOB_RECURSE IMGUI "${CMAKE_SOURCE_DIR}/imgui/*")
+file(GLOB_RECURSE GLAD "Source/glad.c")
+file(GLOB_RECURSE GIT ".gitignore")
+file(GLOB_RECURSE SHADERS "Source/*.frag" "Source/*.vert")
 
 # Set up filters for organizing the source files in the Visual Studio solution
 source_group("Source Files" FILES ${CPP_SOURCES})
