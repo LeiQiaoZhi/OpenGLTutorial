@@ -35,7 +35,9 @@ public:
 	void orbit(float _angle_x, float _angle_y);
 	void zoom(float zoom_factor);
 
+	// queries
 	glm::mat4 compute_view_matrix() { return camera_->compute_view_matrix(); }
 	glm::mat4 compute_proj_matrix() { return camera_->compute_proj_matrix(width_, height_); }
+	glm::vec3 get_position() { return camera_->get_position(); }
 
 };
