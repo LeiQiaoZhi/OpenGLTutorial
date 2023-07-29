@@ -8,6 +8,7 @@ in vec3 normal;
 in vec3 pos; // world pos of the frag
 
 uniform sampler2D tex0; // texture from texture unit 0
+uniform sampler2D tex1; // texture from texture unit 1, specular map
 uniform vec4 lightColor;
 uniform vec3 lightPos;
 uniform vec3 camPos;
@@ -24,7 +25,8 @@ void main()
 	float specularAmount = 0.5f;
 	vec3 posToCam = normalize(camPos - pos);
 	vec3 reflectPosToLight = reflect(-posToLight, n);
-	float specular = pow(max(dot(reflectPosToLight, n), 0.0f),8) * specularAmount;
+	float specular = pow(max(dot(reflectPosToLight, n), 0.0f),16) * specularAmount; 
 
-	FragColor = texture(tex0, texCoord) * lightColor * (ambient + diffuse + specular);
+	FragColor = (texture(tex0, texCoord) * (ambient + diffuse) 
+		+ specular * texture(tex1,texCoord).r) * lightColor;
 }

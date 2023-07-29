@@ -8,6 +8,7 @@ class Texture {
 public:
 	GLuint texture_object_ID;
 	GLuint type;
+	GLenum slot; // the texture unit the texture is binding to
 
 	Texture(const char* _image, GLenum _type, GLenum _slot, GLenum _format, GLenum _pixel_type);
 

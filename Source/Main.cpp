@@ -26,42 +26,22 @@ const int HEIGHT = 1600;
 const float SCALE = 1;
 
 glm::vec4 light_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-glm::vec3 light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
+glm::vec3 light_pos = glm::vec3(0.0f, 0.5f, 0.0f);
 
 // Vertices coordinates
 GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
-
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
+{ //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
+	-1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+	-1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	 1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	 1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
 };
 
 // Indices for vertices order
 GLuint indices[] =
 {
-	0, 1, 2, // Bottom side
-	0, 2, 3, // Bottom side
-	4, 6, 5, // Left side
-	7, 9, 8, // Non-facing side
-	10, 12, 11, // Right side
-	13, 15, 14 // Facing side
+	0, 1, 2,
+	0, 2, 3
 };
 
 int main() {
@@ -115,8 +95,10 @@ int main() {
 	vbo.unbind();
 	ebo.unbind();
 
-	Texture texture((dir_path + "\\Textures\\brick.png").c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture texture((dir_path + "\\Textures\\planks.png").c_str(), GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
 	texture.pass_texture_to_shader(shader, "tex0", 0);
+	Texture spec_map((dir_path + "\\Textures\\planksSpec.png").c_str(), GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
+	spec_map.pass_texture_to_shader(shader, "tex1", 1);
 
 	UI::init(window, "#version 330");
 	UI::UIPanel debugPanel("Debug");
@@ -135,7 +117,7 @@ int main() {
 	double prev_time = glfwGetTime();
 
 	// create camera
-	Camera camera(glm::vec3(0.0f, 0.0f, -1.0f));
+	Camera camera(glm::vec3(0.0f, 0.0f, -2.0f));
 	CameraController camera_controller(&camera, WIDTH, HEIGHT);
 
 	// in a while loop so the window isn't closed immediately
@@ -166,7 +148,7 @@ int main() {
 		int world_id = glGetUniformLocation(shader.program_ID, "world");
 		int view_id = glGetUniformLocation(shader.program_ID, "view");
 		int proj_id = glGetUniformLocation(shader.program_ID, "proj");
-		GLuint cam_pos_id = glGetUniformLocation(shader.program_ID, "camPos");
+		int cam_pos_id = glGetUniformLocation(shader.program_ID, "camPos");
 		glUniformMatrix4fv(world_id, 1, GL_FALSE, glm::value_ptr(world));
 		glUniformMatrix4fv(view_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_view_matrix()));
 		glUniformMatrix4fv(proj_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_proj_matrix()));
@@ -176,6 +158,8 @@ int main() {
 		camera_controller.handle_inputs(window);
 
 		texture.bind();
+		spec_map.bind();
+
 		vao.bind();
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 

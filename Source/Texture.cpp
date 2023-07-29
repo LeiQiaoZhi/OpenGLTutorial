@@ -3,6 +3,7 @@
 Texture::Texture(const char* _image, GLenum _type, GLenum _slot, GLenum _format, GLenum _pixel_type)
 {
 	type = _type;
+	slot = _slot;
 
 	// Load image
 	int width, height, num_channels;
@@ -11,8 +12,8 @@ Texture::Texture(const char* _image, GLenum _type, GLenum _slot, GLenum _format,
 
 	// Generate texture object
 	glGenTextures(1, &texture_object_ID);
-	// Activate texture unit
-	glActiveTexture(_slot);
+	// Activate texture unit, GL_TEXTURE0 is the first texture unit
+	glActiveTexture(GL_TEXTURE0 + _slot);
 	// Bind texture object to active texture unit
 	glBindTexture(type, texture_object_ID);
 
@@ -43,6 +44,9 @@ void Texture::pass_texture_to_shader(Shader& _shader, const char* uniform, GLuin
 
 void Texture::bind()
 {
+	// Activate the texture unit that the texture is binding to
+	glActiveTexture(GL_TEXTURE0 + slot);
+	// Bind texture object to active texture unit
 	glBindTexture(type, texture_object_ID);
 }
 
