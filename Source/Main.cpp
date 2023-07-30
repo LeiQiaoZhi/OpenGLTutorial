@@ -117,7 +117,7 @@ int main() {
 	double prev_time = glfwGetTime();
 
 	// create camera
-	Camera camera(glm::vec3(0.0f, 0.0f, -2.0f));
+	Camera camera(glm::vec3(0.0f, 0.5f, -2.0f));
 	CameraController camera_controller(&camera, WIDTH, HEIGHT);
 
 	// in a while loop so the window isn't closed immediately
