@@ -1,11 +1,5 @@
 #include "UIApp.h"
-#include "shaderClass.h";
-#include "VBO.h"
-#include "VAO.h"
-#include "EBO.h"
-#include "Texture.h"
-#include "Camera.h"
-#include "CameraController.h"
+#include "Mesh.h"
 
 #include <iostream>
 #include <glad/glad.h>
@@ -29,12 +23,12 @@ glm::vec4 light_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 glm::vec3 light_pos = glm::vec3(0.0f, 0.5f, 0.0f);
 
 // Vertices coordinates
-GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
-	-1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
-	-1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-	 1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-	 1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
+Vertex vertices[] =
+{ //               COORDINATES           /            Normals          /           Colors         /       TEXTURE COORDINATES    //
+	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
 };
 
 // Indices for vertices order
@@ -74,38 +68,27 @@ int main() {
 	// create shader program
 	Shader shader((src_path + "\\Others\\default.vert").c_str(), (src_path + "\\Others\\default.frag").c_str());
 
-	// set up vertex array object
-	VAO vao;
-	vao.bind();
+	Texture textures[]{
+	Texture((dir_path + "\\Textures\\planks.png").c_str(), Texture::Type::Diffuse, 0, GL_RGBA, GL_UNSIGNED_BYTE),
+	Texture((dir_path + "\\Textures\\planksSpec.png").c_str(), Texture::Type::Specular, 1, GL_RED, GL_UNSIGNED_BYTE)
+	};
 
-	// create vertex buffer object to store vertices
-	VBO vbo(vertices, sizeof(vertices));
-	// create element buffer object to store indices
-	EBO ebo(indices, sizeof(indices));
+	// vector constructor takes start and end iterators
+	std::vector<Vertex> verts(vertices, vertices + sizeof(vertices) / sizeof(Vertex));
+	std::vector<GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
+	std::vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
 
-	// link vertex positions
-	GLsizeiptr stride = 11 * sizeof(float);
-	vao.link_attrib(vbo, 0, 3, GL_FLOAT, stride, (void*)0);
-	vao.link_attrib(vbo, 1, 3, GL_FLOAT, stride, (void*)(3 * sizeof(float))); // colors
-	vao.link_attrib(vbo, 2, 2, GL_FLOAT, stride, (void*)(6 * sizeof(float))); // tex coords
-	vao.link_attrib(vbo, 3, 3, GL_FLOAT, stride, (void*)(8 * sizeof(float))); // normals
-
-	// unbind all to prevent accidentally modifying them
-	vao.unbind();
-	vbo.unbind();
-	ebo.unbind();
-
-	Texture texture((dir_path + "\\Textures\\planks.png").c_str(), GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
-	texture.pass_texture_to_shader(shader, "tex0", 0);
-	Texture spec_map((dir_path + "\\Textures\\planksSpec.png").c_str(), GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
-	spec_map.pass_texture_to_shader(shader, "tex1", 1);
+	Mesh floor(verts, ind, tex);
 
 	UI::init(window, "#version 330");
 	UI::UIPanel debugPanel("Debug");
 
+	// set constant uniforms
+	shader.activate();
 	GLuint scale_uni_id = glGetUniformLocation(shader.program_ID, "scale");
 	GLuint light_color_uni_id = glGetUniformLocation(shader.program_ID, "lightColor");
 	GLuint light_pos_uni_id = glGetUniformLocation(shader.program_ID, "lightPos");
+
 	glUniform4f(light_color_uni_id, light_color.x, light_color.y, light_color.z, light_color.w);
 	glUniform3f(light_pos_uni_id, light_pos.x, light_pos.y, light_pos.z);
 
@@ -126,8 +109,6 @@ int main() {
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f); // set clear color to dark blue
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear back color buffer to the clear color
 
-		// render triangle
-		shader.activate();
 		// set uniforms
 		glUniform1f(scale_uni_id, SCALE);
 
@@ -138,30 +119,16 @@ int main() {
 			prev_time = current_time;
 		}
 
-		// initialize matrices
 		glm::mat4 world = glm::mat4(1.0f);
-
-		// set up matrices
 		world = glm::rotate(world, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-
 		// send matrices to shader
 		int world_id = glGetUniformLocation(shader.program_ID, "world");
-		int view_id = glGetUniformLocation(shader.program_ID, "view");
-		int proj_id = glGetUniformLocation(shader.program_ID, "proj");
-		int cam_pos_id = glGetUniformLocation(shader.program_ID, "camPos");
 		glUniformMatrix4fv(world_id, 1, GL_FALSE, glm::value_ptr(world));
-		glUniformMatrix4fv(view_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_view_matrix()));
-		glUniformMatrix4fv(proj_id, 1, GL_FALSE, glm::value_ptr(camera_controller.compute_proj_matrix()));
-		auto cam_pos = camera_controller.get_position();
-		glUniform3f(cam_pos_id, cam_pos.x, cam_pos.y, cam_pos.z);
+
 
 		camera_controller.handle_inputs(window);
 
-		texture.bind();
-		spec_map.bind();
-
-		vao.bind();
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		floor.draw(shader, camera_controller);
 
 		// UI
 		debugPanel.show();
@@ -170,11 +137,6 @@ int main() {
 		glfwPollEvents();
 	}
 
-	// Delete all the objects we've created
-	vao.delete_VAO();
-	vbo.deleteBuffer();
-	ebo.delete_buffer();
-	texture.delete_texture();
 	shader.delete_shader();
 
 	// ImGui shutdown

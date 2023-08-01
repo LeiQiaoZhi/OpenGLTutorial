@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-Texture::Texture(const char* _image, GLenum _type, GLenum _slot, GLenum _format, GLenum _pixel_type)
+Texture::Texture(const char* _image, Type _type, GLenum _slot, GLenum _format, GLenum _pixel_type)
 {
 	type = _type;
 	slot = _slot;
@@ -15,23 +15,23 @@ Texture::Texture(const char* _image, GLenum _type, GLenum _slot, GLenum _format,
 	// Activate texture unit, GL_TEXTURE0 is the first texture unit
 	glActiveTexture(GL_TEXTURE0 + _slot);
 	// Bind texture object to active texture unit
-	glBindTexture(type, texture_object_ID);
+	glBindTexture(GL_TEXTURE_2D, texture_object_ID);
 
 	// Set texture parameters
-	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Set texture wrapping
-	glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Load image data to texture object
-	glTexImage2D(type, 0, GL_RGBA, width, height, 0, _format, _pixel_type, image_bytes);
-	glGenerateMipmap(type);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, _format, _pixel_type, image_bytes);
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(image_bytes);
 	// Unbind texture
-	glBindTexture(type, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::pass_texture_to_shader(Shader& _shader, const char* uniform, GLuint _texture_unit)
@@ -47,12 +47,12 @@ void Texture::bind()
 	// Activate the texture unit that the texture is binding to
 	glActiveTexture(GL_TEXTURE0 + slot);
 	// Bind texture object to active texture unit
-	glBindTexture(type, texture_object_ID);
+	glBindTexture(GL_TEXTURE_2D, texture_object_ID);
 }
 
 void Texture::unbind()
 {
-	glBindTexture(type, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::delete_texture()

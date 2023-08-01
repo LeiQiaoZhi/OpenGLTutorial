@@ -1,10 +1,10 @@
 #include "VBO.h"
 
-VBO::VBO(GLfloat* _vertices, GLsizeiptr _size)
+VBO::VBO(std::vector<Vertex>& _vertices)
 {
 	glGenBuffers(1, &ID);
-	bind();
-	glBufferData(GL_ARRAY_BUFFER, _size, _vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, ID);
+	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), _vertices.data(), GL_STATIC_DRAW);
 }
 
 // make the buffer known as a VBO

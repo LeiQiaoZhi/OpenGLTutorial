@@ -2,13 +2,13 @@
 
 out vec4 FragColor;
 
+in vec3 pos; // world pos of the frag
+in vec3 normal;
 in vec3 color; // the input variable from the vertex shader (same name and same type)
 in vec2 texCoord;
-in vec3 normal;
-in vec3 pos; // world pos of the frag
 
-uniform sampler2D tex0; // texture from texture unit 0
-uniform sampler2D tex1; // texture from texture unit 1, specular map
+uniform sampler2D diffuse0; // texture from texture unit 0
+uniform sampler2D specular0; // texture from texture unit 1, specular map
 uniform vec4 lightColor;
 uniform vec3 lightPos;
 uniform vec3 camPos;
@@ -35,8 +35,8 @@ vec4 pointLight()
 	vec3 reflectPosToLight = reflect(-posToLight, n);
 	float specular = pow(max(dot(reflectPosToLight, posToCam), 0.0f),12) * specularAmount; 
 
-	return (texture(tex0, texCoord) * (ambient + diffuse * inten) 
-		+ specular * inten * texture(tex1,texCoord).r) * lightColor;
+	return (texture(diffuse0, texCoord) * (ambient + diffuse * inten) 
+		+ specular * inten * texture(specular0,texCoord).r) * lightColor;
 }
 
 vec4 directionalLight()
@@ -56,8 +56,8 @@ vec4 directionalLight()
 	vec3 reflectPosToLight = reflect(-posToLight, n);
 	float specular = pow(max(dot(reflectPosToLight, posToCam), 0.0f),12) * specularAmount; 
 
-	return (texture(tex0, texCoord) * (ambient + diffuse) 
-		+ specular * texture(tex1,texCoord).r) * lightColor;
+	return (texture(diffuse0, texCoord) * (ambient + diffuse) 
+		+ specular * texture(specular0,texCoord).r) * lightColor;
 }
 
 vec4 spotLight()
@@ -83,11 +83,11 @@ vec4 spotLight()
 	float angle = dot(-posToLight, normalize(coneDir));
 	float inten = clamp((angle - outer)/(inner - outer),0.0f,1.0f);
 
-	return (texture(tex0, texCoord) * (ambient + diffuse * inten) 
-		+ specular * inten * texture(tex1,texCoord).r) * lightColor;
+	return (texture(diffuse0, texCoord) * (ambient + diffuse * inten) 
+		+ specular * inten * texture(specular0,texCoord).r) * lightColor;
 }
 
 void main()
 {
-	FragColor = spotLight();
+	FragColor = pointLight();
 }

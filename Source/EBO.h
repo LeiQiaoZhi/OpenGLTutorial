@@ -1,13 +1,14 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <vector>
 
 class EBO {
 public:
 	GLuint ID;
 	
 	// we need size because vertices is a pointer, not an array
-	EBO(GLuint* _indices, GLsizeiptr _size);
+	EBO(std::vector<GLuint> _indices);
 
 	void bind();
 	void unbind();
