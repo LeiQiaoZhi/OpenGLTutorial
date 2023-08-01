@@ -8,7 +8,7 @@ glm::mat4 Camera::compute_view_matrix()
 glm::mat4 Camera::compute_proj_matrix(int _width, int _height)
 {
 	glm::mat4 proj = glm::mat4(1.0f);
-	proj = glm::perspective(glm::radians(45.0f), (float)_width / _height, 0.1f, 100.0f);
+	proj = glm::perspective(glm::radians(vertical_fov), (float)_width / _height, near_plane, far_plane);
 	return proj;
 }
 

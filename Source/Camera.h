@@ -13,6 +13,11 @@ protected:
 	glm::vec3 forward_ = glm::vec3(0.0f, 0.0f, 1.0f);
 	glm::vec3 up_ = glm::vec3(0.0f, 1.0f, 0.0f);
 
+	// settings
+	float vertical_fov = 60.0f;
+	float near_plane = 0.1f;
+	float far_plane = 100.0f;
+
 public:
 	Camera(glm::vec3 _position) : position_(_position) {}
 	Camera(glm::vec3 _position, glm::vec3 _forward, glm::vec3 _up) : position_(_position), forward_(_forward), up_(_up) {}
